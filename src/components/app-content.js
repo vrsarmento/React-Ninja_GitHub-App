@@ -9,11 +9,8 @@ import Repos from './repos'
 const AppContent = ({ userinfo, repos, starred }) => (
   <div className='app'>
     <Search />
-
     {!!userinfo && <UserInfo userinfo={userinfo} />}
-
     {!!userinfo && <Actions />}
-
     {!!repos.length &&
       <Repos
         title='Repositórios'
@@ -21,7 +18,6 @@ const AppContent = ({ userinfo, repos, starred }) => (
         repos={repos}
       />
     }
-
     {!!starred.length &&
       <Repos
         title='Favoritos'

@@ -49,7 +49,7 @@ class App extends Component {
               [type]: result.map((repo) => ({
                 id: repo.id,
                 name: repo.name,
-                link: repo.url
+                link: repo.html_url
               }))
             })
           })

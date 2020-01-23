@@ -9,7 +9,8 @@ class App extends Component {
     this.state = {
       userinfo: null,
       repos: [],
-      starred: []
+      starred: [],
+      repoType: null
     }
   }
 
@@ -39,17 +40,18 @@ class App extends Component {
 
   getRepos (type) {
     return (e) => {
+      this.setState({ repoType: type })
       ajax()
         .get(`http://api.github.com/users/${this.state.userinfo.login}/${type}`)
         .then(result => {
           this.setState({
             [type]: result.map((repo) => ({
-                id: repo.id,
-                name: repo.name,
-                link: repo.url
-              }))
-            })
+              id: repo.id,
+              name: repo.name,
+              link: repo.url
+            }))
           })
+        })
     }
   }
 
@@ -61,6 +63,7 @@ class App extends Component {
       handleSearch={(e) => this.handleSearch(e)}
       getRepos={this.getRepos('repos')}
       getStarred={this.getRepos('starred')}
+      repoType={this.state.repoType}
     />
   }
 }

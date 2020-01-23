@@ -41,17 +41,19 @@ class App extends Component {
   getRepos (type) {
     return (e) => {
       this.setState({ repoType: type })
-      ajax()
-        .get(`http://api.github.com/users/${this.state.userinfo.login}/${type}`)
-        .then(result => {
-          this.setState({
-            [type]: result.map((repo) => ({
-              id: repo.id,
-              name: repo.name,
-              link: repo.url
-            }))
+      if (!this.state[type].length) {
+        ajax()
+          .get(`http://api.github.com/users/${this.state.userinfo.login}/${type}`)
+          .then(result => {
+            this.setState({
+              [type]: result.map((repo) => ({
+                id: repo.id,
+                name: repo.name,
+                link: repo.url
+              }))
+            })
           })
-        })
+      }
     }
   }
 

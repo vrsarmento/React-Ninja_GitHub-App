@@ -14,13 +14,19 @@ class App extends Component {
     }
   }
 
+  getGitHubApiUrl (username, type) {
+    const internalUser = username ? `/${username}` : ''
+    const internalType = type ? `/${type}` : ''
+    return `http://api.github.com/users${internalUser}${internalType}`
+  }
+
   handleSearch (e) {
     const value = e.target.value
     const key = e.which || e.keyCode
     const ENTER = 13
     if (key === ENTER) {
       ajax()
-        .get(`http://api.github.com/users/${value}`)
+        .get(this.getGitHubApiUrl(value))
         .then(result => {
           this.setState({
             userinfo: {
@@ -43,7 +49,7 @@ class App extends Component {
       this.setState({ repoType: type })
       if (!this.state[type].length) {
         ajax()
-          .get(`http://api.github.com/users/${this.state.userinfo.login}/${type}`)
+          .get(this.getGitHubApiUrl(this.state.userinfo.login, type))
           .then(result => {
             this.setState({
               [type]: result.map((repo) => ({

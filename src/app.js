@@ -24,7 +24,10 @@ class App extends Component {
     const value = e.target.value
     const key = e.which || e.keyCode
     const ENTER = 13
+    const target = e.target
+    
     if (key === ENTER) {
+      target.disabled = true
       ajax()
         .get(this.getGitHubApiUrl(value))
         .then(result => {
@@ -40,6 +43,9 @@ class App extends Component {
             repos: [],
             starred: []
           })
+        })
+        .always(() => {
+          target.disabled = false
         })
     }
   }

@@ -9,3 +9,8 @@ npm install
 ```sh
 npm start 
 ```
+
+### To generate production build:
+```sh
+npm run build
+```

@@ -8,24 +8,29 @@ const HtmlPlugin = require('html-webpack-plugin')
 const ExtractTextplugin = require('extract-text-webpack-plugin')
 
 module.exports = validate({
-	devtool: 'source-map',
-
-	entry: [
-		'react-hot-loader/patch',
-		'webpack-dev-server/client?http://localhost:3000',
-		'webpack/hot/only-dev-server',
-		path.join(__dirname, 'src', 'index'),
-	],
+	entry: path.join(__dirname, 'src', 'index'),
 
 	output: {
 		path: path.join(__dirname, 'dist'),
-		filename: '[name]-[hash].js',
-		publicPath: ''
+		filename: '[name]-[hash].js'
 	},
 
 	plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new ExtractTextplugin('[name]-[hash].css'),
+
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': '"production"'
+      }
+    }),
+
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false }
+    }),
+
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+
     new HtmlPlugin({
       title: 'GitHub App',
       template: path.join(__dirname, 'src', 'html', 'template.html')
@@ -49,7 +54,7 @@ module.exports = validate({
       test: /\.css$/,
       exclude: /node_modules/,
       include: /src/,
-      loader: ['style', 'css']
+      loader: ExtractTextplugin.extract('style', 'css')
     }]
 	}
 })

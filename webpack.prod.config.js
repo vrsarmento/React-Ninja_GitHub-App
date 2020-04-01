@@ -7,6 +7,9 @@ const validate = require('webpack-validator')
 const HtmlPlugin = require('html-webpack-plugin')
 const ExtractTextplugin = require('extract-text-webpack-plugin')
 
+const crp = new ExtractTextplugin('crp.css')
+const styles = new ExtractTextplugin('[name]-[hash].css')
+
 module.exports = validate({
 	entry: path.join(__dirname, 'src', 'index'),
 
@@ -16,7 +19,8 @@ module.exports = validate({
 	},
 
 	plugins: [
-    new ExtractTextplugin('[name]-[hash].css'),
+    crp,
+    styles,
 
     new webpack.DefinePlugin({
       'process.env': {
@@ -33,6 +37,7 @@ module.exports = validate({
 
     new HtmlPlugin({
       title: 'GitHub App',
+      inject: false,
       template: path.join(__dirname, 'src', 'html', 'template.html')
     })
 	],
@@ -52,9 +57,14 @@ module.exports = validate({
 			loader: 'babel'
 		}, {
       test: /\.css$/,
+      exclude: /node_modules|(search|style)\.css/,
+      include: /src/,
+      loader: styles.extract('style', 'css')
+    }, {
+      test: /(search|style)\.css$/,
       exclude: /node_modules/,
       include: /src/,
-      loader: ExtractTextplugin.extract('style', 'css')
+      loader: crp.extract('style', 'css')
     }]
 	}
 })

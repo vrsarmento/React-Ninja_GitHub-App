@@ -51,7 +51,7 @@ module.exports = validate({
       test: /\.css$/,
       exclude: /node_modules/,
       include: /src/,
-      loader: ['style', 'css']
+      loaders: ['style', 'css']
     }]
 	}
 })

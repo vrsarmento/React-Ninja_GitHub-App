@@ -6,7 +6,7 @@ import Actions from './index'
 
 storiesOf('Actions', module)
   .add('first story', () => (
-    <Actions 
+    <Actions
       getRepos={action('Get Repos')}
       getStarred={action('Get Starred')}
     />

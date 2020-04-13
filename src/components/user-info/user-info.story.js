@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import { storiesOf, action } from '@kadira/storybook'
+import { storiesOf } from '@kadira/storybook'
 import UserInfo from './index'
 
 storiesOf('UserInfo', module)

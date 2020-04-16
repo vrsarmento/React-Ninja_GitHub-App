@@ -8,14 +8,23 @@ const centerRule = ({ total, activePage }) => {
   if (activePage === total) {
     return activePage - 2
   }
-  
+
   return activePage - 1
 }
 
-const pagination = ({ total, activePage }) => {
+const pagination = ({ total = 1, activePage = 1 } = {}) => {
+  if (typeof total !== 'number') {
+    throw new TypeError('total should be a number') 
+  }
+
+  if (typeof activePage !== 'number') {
+    throw new TypeError('activePage should be a number')
+  }
+
   if (total <= 5) {
     // ES5 hack
     // return Array.apply(null, { length: total }).map((_, i) => i + 1)
+    // ES6
     return Array.from({ length: total }, (_, i) => i + 1)
   }
   const visiblePages = 3

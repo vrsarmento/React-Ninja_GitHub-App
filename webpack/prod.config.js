@@ -1,8 +1,9 @@
 'use strict'
 
-const path = require('path')
 const webpack = require('webpack')
 const validate = require('webpack-validator')
+
+const common = require('./common')
 
 const HtmlPlugin = require('html-webpack-plugin')
 const ExtractTextplugin = require('extract-text-webpack-plugin')
@@ -11,12 +12,9 @@ const crp = new ExtractTextplugin('crp.css')
 const styles = new ExtractTextplugin('[name]-[hash].css')
 
 module.exports = validate({
-  entry: path.join(__dirname, 'src', 'index'),
+  entry: common.entry,
 
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: '[name]-[hash].js'
-  },
+  output: common.output,
 
   plugins: [
     crp,
@@ -28,37 +26,21 @@ module.exports = validate({
       }
     }),
 
+    new HtmlPlugin(common.htmlPluginConfig('template.html')),
+
     new webpack.optimize.UglifyJsPlugin({
       compress: { warnings: false }
     }),
 
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-
-    new HtmlPlugin({
-      title: 'GitHub App',
-      inject: false,
-      template: path.join(__dirname, 'src', 'html', 'template.html')
-    })
+    new webpack.optimize.OccurrenceOrderPlugin()
   ],
 
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        include: /src/,
-        loader: 'standard'
-      }
-    ],
+    preLoaders: [common.standardPreLoader],
 
     loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        include: /src/,
-        loader: 'babel'
-      },
+      common.jsLoader, 
       {
         test: /\.css$/,
         exclude: /node_modules|(search|style)\.css/,
@@ -74,10 +56,5 @@ module.exports = validate({
     ]
   },
 
-  resolve: {
-    alias: {
-      src: path.join(__dirname, 'src'),
-      components: path.join(__dirname, 'src', 'components')
-    }
-  }
+  resolve: common.resolve
 })

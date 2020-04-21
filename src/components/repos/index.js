@@ -18,14 +18,22 @@ const Repos = ({ title, className, repos, handlePagination }) => (
 
 Repos.defaultProps = {
   className: '',
-  title: '',
-  repos: {}
+  title: ''
 }
 
 Repos.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
-  repos: PropTypes.object,
+  repos: PropTypes.shape({
+    repos: PropTypes.arrayOf(PropTypes.shape({
+      link: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired
+    })).isRequired,
+    pagination: PropTypes.shape({
+      total: PropTypes.number.isRequired,
+      activePage: PropTypes.number.isRequired
+    }).isRequired
+  }),
   handlePagination: PropTypes.func.isRequired
 }
 

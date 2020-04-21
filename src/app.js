@@ -63,7 +63,10 @@ class App extends Component {
     return (e) => {
       this.setState({ repoType: type })
       ajax().get(this.getGitHubApiUrl(this.state.userinfo.login, type, page))
-        .then(result => {
+        .then((result, xhr) => {
+          const linkHeader = xhr.getResponseHeader('Link') || ''
+          const totalPagesMatch = linkHeader.match(/&page=(\d+)>; rel="last"/)
+
           this.setState({
             [type]: {
               repos: result.map((repo) => ({
@@ -72,7 +75,9 @@ class App extends Component {
                 link: repo.html_url
               })),
               pagination: {
-                ...this.state[type].pagination,
+                total: totalPagesMatch
+                  ? +totalPagesMatch[1]
+                  : this.state[type].pagination.total,
                 activePage: page
               }
             }

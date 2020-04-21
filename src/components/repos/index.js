@@ -12,7 +12,7 @@ const Repos = ({ title, className, repos, handlePagination }) => (
         <li key={repo.id}><a href={repo.link}>{repo.name}</a></li>
       ))}
     </ul>
-    <Pagination total={10} activePage={2} onClick={handlePagination} />
+    <Pagination total={10} activePage={repos.pagination.activePage} onClick={handlePagination} />
   </div>
 )
 
@@ -26,6 +26,7 @@ Repos.propTypes = {
   title: PropTypes.string.isRequired,
   repos: PropTypes.shape({
     repos: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
       link: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired
     })).isRequired,

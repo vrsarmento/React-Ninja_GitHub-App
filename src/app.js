@@ -59,7 +59,7 @@ class App extends Component {
     }
   }
 
-  getRepos (type, page) {
+  getRepos (type, page = 1) {
     return (e) => {
       this.setState({ repoType: type })
       ajax().get(this.getGitHubApiUrl(this.state.userinfo.login, type, page))
@@ -71,7 +71,10 @@ class App extends Component {
                 name: repo.name,
                 link: repo.html_url
               })),
-              pagination: this.state[type].pagination
+              pagination: {
+                ...this.state[type].pagination,
+                activePage: page
+              }
             }
           })
         })

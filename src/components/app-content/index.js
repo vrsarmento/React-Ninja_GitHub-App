@@ -24,7 +24,7 @@ const AppContent = ({
     {isFetching && <div>Carregando...</div>}
     {!!userinfo && <UserInfo userinfo={userinfo} />}
     {!!userinfo && <Actions getRepos={getRepos} getStarred={getStarred} />}
-    {!!repos.length && repoType === 'repos' &&
+    {!!repos.repos.length && repoType === 'repos' &&
       <Repos
         title='Repositórios'
         className='repos'
@@ -32,7 +32,7 @@ const AppContent = ({
         handlePagination={(clicked) => handlePagination('repos', clicked)}
       />
     }
-    {!!starred.length && repoType === 'starred' &&
+    {!!starred.repos.length && repoType === 'starred' &&
       <Repos
         title='Favoritos'
         className='starred'
@@ -45,8 +45,8 @@ const AppContent = ({
 
 AppContent.propTypes = {
   userinfo: PropTypes.object,
-  repos: PropTypes.array.isRequired,
-  starred: PropTypes.array.isRequired,
+  repos: PropTypes.object.isRequired,
+  starred: PropTypes.object.isRequired,
   repoType: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
   handleSearch: PropTypes.func.isRequired,

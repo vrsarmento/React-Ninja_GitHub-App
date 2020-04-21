@@ -8,7 +8,7 @@ const Repos = ({ title, className, repos, handlePagination }) => (
   <div className={className}>
     <h2>{title}:</h2>
     <ul>
-      {repos.map((repo) => (
+      {repos.repos.map((repo) => (
         <li key={repo.id}><a href={repo.link}>{repo.name}</a></li>
       ))}
     </ul>
@@ -19,13 +19,13 @@ const Repos = ({ title, className, repos, handlePagination }) => (
 Repos.defaultProps = {
   className: '',
   title: '',
-  repos: []
+  repos: {}
 }
 
 Repos.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
-  repos: PropTypes.array,
+  repos: PropTypes.object,
   handlePagination: PropTypes.func.isRequired
 }
 

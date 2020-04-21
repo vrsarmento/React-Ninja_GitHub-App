@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import ajax from '@fdaciuk/ajax'
 import AppContent from 'components/app-content'
+
 class App extends Component {
   constructor () {
     super()
@@ -13,12 +14,14 @@ class App extends Component {
       repoType: null,
       isFetching: false
     }
+    this.perPage = 3
   }
 
-  getGitHubApiUrl (username, type) {
+  getGitHubApiUrl (username, type, page = 1) {
+    console.log(type, page)
     const internalUser = username ? `/${username}` : ''
     const internalType = type ? `/${type}` : ''
-    return `http://api.github.com/users${internalUser}${internalType}`
+    return `https://api.github.com/users${internalUser}${internalType}?per_page=${this.perPage}&page=${page}`
   }
 
   handleSearch (e) {
@@ -50,22 +53,19 @@ class App extends Component {
     }
   }
 
-  getRepos (type) {
+  getRepos (type, page) {
     return (e) => {
       this.setState({ repoType: type })
-      if (!this.state[type].length) {
-        ajax()
-          .get(this.getGitHubApiUrl(this.state.userinfo.login, type))
-          .then(result => {
-            this.setState({
-              [type]: result.map((repo) => ({
-                id: repo.id,
-                name: repo.name,
-                link: repo.html_url
-              }))
-            })
+      ajax().get(this.getGitHubApiUrl(this.state.userinfo.login, type, page))
+        .then(result => {
+          this.setState({
+            [type]: result.map((repo) => ({
+              id: repo.id,
+              name: repo.name,
+              link: repo.html_url
+            }))
           })
-      }
+        })
     }
   }
 
@@ -75,6 +75,7 @@ class App extends Component {
       handleSearch={(e) => this.handleSearch(e)}
       getRepos={this.getRepos('repos')}
       getStarred={this.getRepos('starred')}
+      handlePagination={(type, page) => this.getRepos(type, page)()}
     />
   }
 }
